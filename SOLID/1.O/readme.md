@@ -26,7 +26,7 @@ You can improve on this in 2 ways in TypeScript, you can create a Product class 
 ````
 
 ## Your mission
-Look at the old.ts file, and you see a bunch of animals in a zoo, all making the sounds.
+Look at the new.ts file, and you see a bunch of animals in a zoo, all making the sounds.
 Now add another animal (you can choose your favorite animal), and make sure it makes a sound.
 
 Did you notice you needed to alter the Zoo object even when all you did was add a new Animal class? Would it not be much better to move the `makeSound` function to each Animal class, so each animal can decide for himself what sound he makes instead of the Zoo class?

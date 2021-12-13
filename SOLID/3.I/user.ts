@@ -1,8 +1,8 @@
-import {UserAuth} from "./userAuth";
+import {FacebookAuth} from "./facebookAuth";
 import {AdminAuth} from "./adminAuth";
 import {GoogleAuth} from "./googleAuth";
 
-export class User implements UserAuth, AdminAuth, GoogleAuth {
+export class User implements FacebookAuth, AdminAuth, GoogleAuth {
     private _password : string;
     private _facebookToken : string;
     private _googleToken : string;
