@@ -3,10 +3,18 @@ import {Music} from "./music";
 import {Tank} from "./tank";
 
 export class Car {
-    private _engine: Engine = new Engine();
-    private _tank: Tank = new Tank(100);
-    private _music: Music = new Music(0, 50);
-    private _miles : number = 0;
+    private readonly _engine: Engine;
+    private readonly _tank: Tank;
+    private readonly _music: Music;
+    private _miles : number;
+
+
+    constructor(engine: Engine, tank: Tank, music: Music, miles: number) {
+        this._engine = engine;
+        this._tank = tank;
+        this._music = music;
+        this._miles = miles;
+    }
 
     get miles(): number {
         return this._miles;

@@ -1,7 +1,6 @@
-import { Fuel } from "./fuel";
 export class Tank {
-    constructor(MAXIMUM_FUEL_CAPACITY) {
-        this._fuel = new Fuel("Petrol", 0);
+    constructor(fuel, MAXIMUM_FUEL_CAPACITY) {
+        this._fuel = fuel;
         this.MAXIMUM_FUEL_CAPACITY = MAXIMUM_FUEL_CAPACITY;
     }
     addFuel(fuel) {

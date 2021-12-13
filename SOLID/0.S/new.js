@@ -1,3 +1,7 @@
+import { Fuel } from "./fuel";
+import { Tank } from "./tank";
+import { Engine } from "./engine";
+import { Music } from "./music";
 import { Car } from "./car";
 const musicToggleElement = document.querySelector('#music-toggle');
 const musicSliderElement = document.querySelector('#music-slider');
@@ -5,9 +9,17 @@ const engineToggleElement = document.querySelector('#engine-toggle');
 const addFuelForm = document.querySelector('#add-fuel-form');
 const addFuelInput = document.querySelector('#add-fuel-input');
 const fuelLevelElement = document.querySelector('#fuel-level');
+const fuelTypeElement = document.querySelector('#fuel-type');
 const milesElement = document.querySelector('#miles-value');
 const audioElement = document.querySelector('#car-music');
-let car = new Car;
+let fuel = new Fuel("Petrol", 0);
+let tank = new Tank(fuel, 100);
+let engine = new Engine(10);
+let music = new Music(0, 50);
+let car = new Car(engine, tank, music, 0);
+if (fuel.type === "Electric") {
+    fuelTypeElement.innerText = 'kWh';
+}
 musicToggleElement.addEventListener('click', () => {
     if (car.music.level === 0) {
         car.music.turnOn();

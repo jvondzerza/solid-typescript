@@ -1,10 +1,11 @@
 import {Fuel} from "./fuel";
 
 export class Tank {
-    private _fuel: Fuel = new Fuel("Petrol", 0);
+    private readonly _fuel: Fuel;
     private readonly MAXIMUM_FUEL_CAPACITY: number;
 
-    constructor(MAXIMUM_FUEL_CAPACITY: number) {
+    constructor(fuel: Fuel, MAXIMUM_FUEL_CAPACITY: number) {
+        this._fuel = fuel;
         this.MAXIMUM_FUEL_CAPACITY = MAXIMUM_FUEL_CAPACITY;
     }
 

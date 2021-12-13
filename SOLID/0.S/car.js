@@ -1,12 +1,9 @@
-import { Engine } from "./engine";
-import { Music } from "./music";
-import { Tank } from "./tank";
 export class Car {
-    constructor() {
-        this._engine = new Engine();
-        this._tank = new Tank(100);
-        this._music = new Music(0, 50);
-        this._miles = 0;
+    constructor(engine, tank, music, miles) {
+        this._engine = engine;
+        this._tank = tank;
+        this._music = music;
+        this._miles = miles;
     }
     get miles() {
         return this._miles;

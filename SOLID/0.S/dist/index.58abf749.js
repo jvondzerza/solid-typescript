@@ -459,6 +459,10 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"eyNZp":[function(require,module,exports) {
+var _fuel = require("./fuel");
+var _tank = require("./tank");
+var _engine = require("./engine");
+var _music = require("./music");
 var _car = require("./car");
 const musicToggleElement = document.querySelector('#music-toggle');
 const musicSliderElement = document.querySelector('#music-slider');
@@ -466,9 +470,15 @@ const engineToggleElement = document.querySelector('#engine-toggle');
 const addFuelForm = document.querySelector('#add-fuel-form');
 const addFuelInput = document.querySelector('#add-fuel-input');
 const fuelLevelElement = document.querySelector('#fuel-level');
+const fuelTypeElement = document.querySelector('#fuel-type');
 const milesElement = document.querySelector('#miles-value');
 const audioElement = document.querySelector('#car-music');
-let car = new _car.Car;
+let fuel = new _fuel.Fuel("Petrol", 0);
+let tank = new _tank.Tank(fuel, 100);
+let engine = new _engine.Engine(10);
+let music = new _music.Music(0, 50);
+let car = new _car.Car(engine, tank, music, 0);
+if (fuel.type === "Electric") fuelTypeElement.innerText = 'kWh';
 musicToggleElement.addEventListener('click', ()=>{
     if (car.music.level === 0) {
         car.music.turnOn();
@@ -512,20 +522,17 @@ setInterval(()=>{
     else audioElement.play();
 }, 1000);
 
-},{"./car":"i8sqL"}],"i8sqL":[function(require,module,exports) {
+},{"./car":"i8sqL","./fuel":"6PLdp","./tank":"14N9Z","./engine":"hMGwO","./music":"aVZdr"}],"i8sqL":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Car", ()=>Car
 );
-var _engine = require("./engine");
-var _music = require("./music");
-var _tank = require("./tank");
 class Car {
-    constructor(){
-        this._engine = new _engine.Engine();
-        this._tank = new _tank.Tank(100);
-        this._music = new _music.Music(0, 50);
-        this._miles = 0;
+    constructor(engine, tank, music, miles){
+        this._engine = engine;
+        this._tank = tank;
+        this._music = music;
+        this._miles = miles;
     }
     get miles() {
         return this._miles;
@@ -549,7 +556,7 @@ class Car {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./tank":"14N9Z","./engine":"hMGwO","./music":"aVZdr"}],"ciiiV":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ciiiV":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -579,26 +586,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"14N9Z":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Tank", ()=>Tank
-);
-var _fuel = require("./fuel");
-class Tank {
-    constructor(MAXIMUM_FUEL_CAPACITY){
-        this._fuel = new _fuel.Fuel("Petrol", 0);
-        this.MAXIMUM_FUEL_CAPACITY = MAXIMUM_FUEL_CAPACITY;
-    }
-    addFuel(fuel) {
-        this._fuel.quantity = Math.min(fuel + this._fuel.quantity, this.MAXIMUM_FUEL_CAPACITY);
-    }
-    get fuel() {
-        return this._fuel;
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./fuel":"6PLdp"}],"6PLdp":[function(require,module,exports) {
+},{}],"6PLdp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Fuel", ()=>Fuel
@@ -622,15 +610,33 @@ class Fuel {
     }
 }
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"14N9Z":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Tank", ()=>Tank
+);
+class Tank {
+    constructor(fuel, MAXIMUM_FUEL_CAPACITY){
+        this._fuel = fuel;
+        this.MAXIMUM_FUEL_CAPACITY = MAXIMUM_FUEL_CAPACITY;
+    }
+    addFuel(fuel1) {
+        this._fuel.quantity = Math.min(fuel1 + this._fuel.quantity, this.MAXIMUM_FUEL_CAPACITY);
+    }
+    get fuel() {
+        return this._fuel;
+    }
+}
+
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"hMGwO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Engine", ()=>Engine
 );
 class Engine {
-    constructor(){
+    constructor(FUEL_MILEAGE){
         this._status = false;
-        this._FUEL_MILEAGE = 10;
+        this._FUEL_MILEAGE = FUEL_MILEAGE;
     }
     get status() {
         return this._status;
