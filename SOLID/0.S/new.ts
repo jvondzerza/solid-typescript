@@ -15,7 +15,7 @@ const milesElement = <HTMLElement>document.querySelector('#miles-value');
 const audioElement = <HTMLAudioElement>document.querySelector('#car-music');
 
 
-let fuel = new Fuel("Petrol", 0);
+let fuel = new Fuel("Electric", 0);
 let tank = new Tank(fuel, 100);
 let engine = new Engine(10);
 let music = new Music(0, 50);
@@ -26,7 +26,7 @@ if (fuel.type === "Electric") {
 }
 
 musicToggleElement.addEventListener('click', () => {
-    if(car.music.level === 0) {
+    if(car.musicLevel === 0) {
         car.music.turnOn();
         musicSliderElement.value = car.music.level.toString();
         musicToggleElement.innerText = 'Turn music off';

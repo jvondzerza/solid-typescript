@@ -140,12 +140,12 @@
       this[globalName] = mainExports;
     }
   }
-})({"cUNH1":[function(require,module,exports) {
+})({"l0awO":[function(require,module,exports) {
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "4a236f9275d0a351";
-module.bundle.HMR_BUNDLE_ID = "1a59f79d58abf749";
+module.bundle.HMR_BUNDLE_ID = "4bb6b633d05d1189";
 "use strict";
 function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
@@ -458,225 +458,143 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"eyNZp":[function(require,module,exports) {
-var _fuel = require("./fuel");
-var _tank = require("./tank");
-var _engine = require("./engine");
-var _music = require("./music");
-var _car = require("./car");
-const musicToggleElement = document.querySelector('#music-toggle');
-const musicSliderElement = document.querySelector('#music-slider');
-const engineToggleElement = document.querySelector('#engine-toggle');
-const addFuelForm = document.querySelector('#add-fuel-form');
-const addFuelInput = document.querySelector('#add-fuel-input');
-const fuelLevelElement = document.querySelector('#fuel-level');
-const fuelTypeElement = document.querySelector('#fuel-type');
-const milesElement = document.querySelector('#miles-value');
-const audioElement = document.querySelector('#car-music');
-let fuel = new _fuel.Fuel("Electric", 0);
-let tank = new _tank.Tank(fuel, 100);
-let engine = new _engine.Engine(10);
-let music = new _music.Music(0, 50);
-let car = new _car.Car(engine, tank, music, 0);
-if (fuel.type === "Electric") fuelTypeElement.innerText = 'kWh';
-musicToggleElement.addEventListener('click', ()=>{
-    if (car.musicLevel === 0) {
-        car.music.turnOn();
-        musicSliderElement.value = car.music.level.toString();
-        musicToggleElement.innerText = 'Turn music off';
-        return;
-    }
-    musicToggleElement.innerText = 'Turn music on';
-    car.music.turnOff();
+},{}],"2dnOX":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
-//I use input instead of change, because then the value changes when I move the mouse, not only on release
-musicSliderElement.addEventListener('input', (event)=>{
-    let target = event.target;
-    car.music.level = target.value;
-    audioElement.volume = car.music.level / 100;
-    //@todo when you are repeating the same text over and over again maybe we should have made some constants for it? Can you do improve on this?
-    musicToggleElement.innerText = car.music.level ? 'Turn music off' : 'Turn music on';
+const product_1 = require("./product");
+const fixedDiscount_1 = require("./fixedDiscount");
+const variableDiscount_1 = require("./variableDiscount");
+const noDiscount_1 = require("./noDiscount");
+const shoppingBasket_1 = require("./shoppingBasket");
+let cart = new shoppingBasket_1.ShoppingBasket();
+cart.addProduct(new product_1.Product('Chair', 25, new fixedDiscount_1.FixedDiscount(10)));
+cart.addProduct(new product_1.Product('Table', 50, new variableDiscount_1.VariableDiscount(25)));
+cart.addProduct(new product_1.Product('Bed', 100, new noDiscount_1.NoDiscount()));
+const tableElement = document.querySelector('#cart tbody');
+cart.products.forEach((product)=>{
+    let tr = document.createElement('tr');
+    let td = document.createElement('td');
+    td.innerText = product.name;
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.originalPrice.toFixed(2) + " €";
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.calculatePrice().toFixed(2) + " €";
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.showCalculation();
+    tr.appendChild(td);
+    tableElement.appendChild(tr);
 });
-engineToggleElement.addEventListener('click', ()=>{
-    if (car.engine.status) {
-        car.engine.turnOff();
-        engineToggleElement.innerText = 'Turn engine on';
-        return;
-    }
-    engineToggleElement.innerText = 'Turn engine off';
-    car.engine.turnOn();
+
+},{"./product":"2Qrvk","./fixedDiscount":"12UpL","./variableDiscount":"6HQHV","./noDiscount":"fsabK","./shoppingBasket":"kwYLk"}],"2Qrvk":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
-addFuelForm.addEventListener('submit', (event)=>{
-    event.preventDefault();
-    car.tank.addFuel(Number(addFuelInput.value));
-    fuelLevelElement.innerText = car.tank.fuel.quantity.toString();
+exports.Product = void 0;
+class Product {
+    constructor(name, price, discount){
+        this._name = name;
+        this._price = price;
+        this._discount = discount;
+    }
+    get name() {
+        return this._name;
+    }
+    get originalPrice() {
+        return this._price;
+    }
+    //The reason we call this function "calculateX" instead of using a getter on Price is because names communicate a lot of meaning between programmers.
+    //most programmers would assume a getPrice() would be a simple display of a property that is already calculated, but in fact this function does a (more expensive) operation to calculate on the fly.
+    calculatePrice() {
+        return this._discount.apply(this._price);
+    }
+    showCalculation() {
+        return this._discount.showCalculation(this._price);
+    }
+}
+exports.Product = Product;
+
+},{}],"12UpL":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
-setInterval(()=>{
-    car.drive();
-    //while it looks like both lines below are the same there is a subtle difference (you could put breakpoints here to see the difference):
-    // this <cast> will only tell TypeScript that the value is a string, but the actual variable in JS is not changed in any way: it is in reality still a number
-    milesElement.innerText = car.miles;
-    // This .toString() will actually convert the value in JavaScript from an integer to a string
-    fuelLevelElement.innerText = car.tank.fuel.quantity.toString();
-    if (car.music.level === 0) audioElement.pause();
-    else audioElement.play();
-}, 1000);
-
-},{"./car":"i8sqL","./fuel":"6PLdp","./tank":"14N9Z","./engine":"hMGwO","./music":"aVZdr"}],"i8sqL":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Car", ()=>Car
-);
-class Car {
-    constructor(engine, tank, music, miles){
-        this._engine = engine;
-        this._tank = tank;
-        this._music = music;
-        this._miles = miles;
+exports.FixedDiscount = void 0;
+class FixedDiscount {
+    constructor(value){
+        this._value = value;
+        if (value <= 0) throw new Error('You cannot create a fixed discount with a negative value');
     }
-    get miles() {
-        return this._miles;
+    apply(price) {
+        return Math.max(0, price - this._value);
     }
-    get engine() {
-        return this._engine;
-    }
-    get tank() {
-        return this._tank;
-    }
-    get music() {
-        return this._music;
-    }
-    drive() {
-        if (this._engine.status === false || this._tank.fuel.quantity <= 0) //what I am doing here is a good principle called "failing early"
-        // If you have some conditions you need to check, that will exclude most of the code in your function check that first
-        // This prevents your "happy path" of code to be deeply indented.
-        return;
-        this._tank.fuel.quantity -= 1;
-        this._miles += this._engine.FUEL_MILEAGE;
+    showCalculation(price1) {
+        return price1 + "€ -  " + this._value + "€ (min 0 €)";
     }
 }
+exports.FixedDiscount = FixedDiscount;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ciiiV":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"6PLdp":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Fuel", ()=>Fuel
-);
-class Fuel {
-    constructor(type, quantity){
-        this._type = type;
-        this._quantity = quantity;
+},{}],"6HQHV":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.VariableDiscount = void 0;
+class VariableDiscount {
+    constructor(value){
+        this._value = value;
+        if (value <= 0) throw new Error('You cannot create a variable discount with a negative value');
     }
-    get type() {
-        return this._type;
+    apply(price) {
+        return price - price * this._value / 100;
     }
-    set type(value) {
-        this._type = value;
-    }
-    get quantity() {
-        return this._quantity;
-    }
-    set quantity(value1) {
-        this._quantity = value1;
+    showCalculation(price1) {
+        return price1 + " € -  " + this._value + "%";
     }
 }
+exports.VariableDiscount = VariableDiscount;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"14N9Z":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Tank", ()=>Tank
-);
-class Tank {
-    constructor(fuel, MAXIMUM_FUEL_CAPACITY){
-        this._fuel = fuel;
-        this.MAXIMUM_FUEL_CAPACITY = MAXIMUM_FUEL_CAPACITY;
+},{}],"fsabK":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.NoDiscount = void 0;
+class NoDiscount {
+    apply(price) {
+        return price;
     }
-    addFuel(fuel1) {
-        this._fuel.quantity = Math.min(fuel1 + this._fuel.quantity, this.MAXIMUM_FUEL_CAPACITY);
-    }
-    get fuel() {
-        return this._fuel;
+    showCalculation(price1) {
+        return "No discount";
     }
 }
+exports.NoDiscount = NoDiscount;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"hMGwO":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Engine", ()=>Engine
-);
-class Engine {
-    constructor(FUEL_MILEAGE){
-        this._status = false;
-        this._FUEL_MILEAGE = FUEL_MILEAGE;
+},{}],"kwYLk":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ShoppingBasket = void 0;
+class ShoppingBasket {
+    constructor(){
+        //this array only accepts Product objects, nothing else
+        this._products = [];
     }
-    get status() {
-        return this._status;
+    get products() {
+        return this._products;
     }
-    turnOn() {
-        this._status = true;
-    }
-    turnOff() {
-        this._status = false;
-    }
-    get FUEL_MILEAGE() {
-        return this._FUEL_MILEAGE;
+    addProduct(product) {
+        this._products.push(product);
     }
 }
+exports.ShoppingBasket = ShoppingBasket;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"aVZdr":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Music", ()=>Music
-);
-class Music {
-    constructor(level, oldLevel){
-        this._level = level;
-        this._oldLevel = oldLevel;
-    }
-    get level() {
-        return this._level;
-    }
-    set level(value) {
-        this._level = value;
-        this._oldLevel = value;
-    }
-    turnOn() {
-        this._level = this._oldLevel;
-    }
-    turnOff() {
-        this._level = 0;
-    }
-}
+},{}]},["l0awO","2dnOX"], "2dnOX", "parcelRequire94c2")
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}]},["cUNH1","eyNZp"], "eyNZp", "parcelRequire94c2")
-
-//# sourceMappingURL=index.58abf749.js.map
+//# sourceMappingURL=index.d05d1189.js.map

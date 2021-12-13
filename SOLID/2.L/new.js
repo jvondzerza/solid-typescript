@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const product_1 = require("./product");
+const fixedDiscount_1 = require("./fixedDiscount");
+const variableDiscount_1 = require("./variableDiscount");
+const noDiscount_1 = require("./noDiscount");
+const shoppingBasket_1 = require("./shoppingBasket");
+let cart = new shoppingBasket_1.ShoppingBasket();
+cart.addProduct(new product_1.Product('Chair', 25, new fixedDiscount_1.FixedDiscount(10)));
+cart.addProduct(new product_1.Product('Table', 50, new variableDiscount_1.VariableDiscount(25)));
+cart.addProduct(new product_1.Product('Bed', 100, new noDiscount_1.NoDiscount()));
+const tableElement = document.querySelector('#cart tbody');
+cart.products.forEach((product) => {
+    let tr = document.createElement('tr');
+    let td = document.createElement('td');
+    td.innerText = product.name;
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.originalPrice.toFixed(2) + " €";
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.calculatePrice().toFixed(2) + " €";
+    tr.appendChild(td);
+    td = document.createElement('td');
+    td.innerText = product.showCalculation();
+    tr.appendChild(td);
+    tableElement.appendChild(tr);
+});
