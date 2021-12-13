@@ -465,7 +465,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 const user_1 = require("./user");
 const admin_1 = require("./admin");
-const googleBot_1 = require("./googleBot");
 const passwordElement = document.querySelector('#password');
 const typePasswordElement = document.querySelector('#typePassword');
 const typeGoogleElement = document.querySelector('#typeGoogle');
@@ -475,34 +474,39 @@ const loginFormElement = document.querySelector('#login-form');
 const resetPasswordElement = document.querySelector('#resetPassword');
 let guest = new user_1.User('user', 'secret_token_fb', 'secret_token_google');
 let admin = new admin_1.Admin('admin');
-let googleBot = new googleBot_1.GoogleBot('secret_token_google');
+//let googleBot = new GoogleBot('secret_token_google')
 loginFormElement.addEventListener('submit', (event)=>{
     event.preventDefault();
-    let user = loginAsAdminElement.checked ? admin : guest || googleBot;
+    let user = loginAsAdminElement.checked ? admin : guest;
     debugger;
     let auth = false;
     switch(true){
         case typePasswordElement.checked:
             auth = user.checkPassword(passwordElement.value);
-            if (user === googleBot_1.GoogleBot) alert('Bot only has google permissions');
             break;
         case typeGoogleElement.checked:
-            if (user === admin) alert('Function not supported for admins');
-            auth = user.checkGoogleLogin('secret_token_google');
+            switch(user){
+                case admin:
+                    alert('Function not supported for login type');
+                    auth = false;
+                    break;
+                case guest:
+                    auth = user.checkGoogleLogin('secret_token_google');
+                    break;
+            }
             break;
         case typeFacebookElement.checked:
             switch(user){
                 case admin:
-                    alert('Function not supported for admins');
-                    break;
-                case googleBot:
-                    alert('Bot only has google permissions');
+                    alert('Function not supported for login type');
+                    auth = false;
                     break;
                 case guest:
                     debugger;
                     auth = user.getFacebookLogin('secret_token_fb');
                     break;
             }
+            break;
     }
     if (auth) alert('login success');
     else alert('login failed');
@@ -513,7 +517,7 @@ resetPasswordElement.addEventListener('click', (event)=>{
     user.resetPassword();
 });
 
-},{"./user":"erXBv","./admin":"52i26","./googleBot":"jHtXu"}],"erXBv":[function(require,module,exports) {
+},{"./user":"erXBv","./admin":"52i26"}],"erXBv":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -567,26 +571,6 @@ class Admin {
     }
 }
 exports.Admin = Admin;
-
-},{}],"jHtXu":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.GoogleBot = void 0;
-class GoogleBot {
-    constructor(googleToken){
-        this._googleToken = googleToken;
-    }
-    checkGoogleLogin(token) {
-        // return "this will not work";
-        return token === this._googleToken;
-    }
-    setGoogleToken(token1) {
-        this._googleToken = token1;
-    }
-}
-exports.GoogleBot = GoogleBot;
 
 },{}]},["gbacM","lnVUw"], "lnVUw", "parcelRequire94c2")
 

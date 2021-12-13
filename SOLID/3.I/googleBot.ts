@@ -4,7 +4,6 @@ export class GoogleBot implements GoogleAuth{
     private _googleToken: string;
 
     constructor(googleToken: string) {
-
         this._googleToken = googleToken;
     }
 
