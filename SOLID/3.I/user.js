@@ -9,6 +9,7 @@ class User {
     }
     //Interesting detail here: while I did not define a return type or param type, any deviation from the interface will give you an error.
     // Test it out by uncommenting the code below.
+    //todo refactor functions for getting and setting social media logins => one function for getting both logins, another for setting them, refactor fbAuth and gAuth into one interface
     checkGoogleLogin(token) {
         // return "this will not work";
         return (token === this._googleToken);
